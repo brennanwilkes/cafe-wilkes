@@ -20,6 +20,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: actions/configure-pages@v6
+      # Pages serves everything with max-age=600, so bust browser caches by stamping the commit onto asset URLs.
+      - name: Stamp build id
+        run: sed -i "s/__BUILD__/${GITHUB_SHA::8}/g" frontend/index.html frontend/*.js
       - uses: actions/upload-pages-artifact@v5
         with:
           path: frontend

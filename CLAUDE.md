@@ -22,15 +22,20 @@ restaurant-style, Brennan gets a push notification. Live at https://brennanwilke
   unit for "Total due". Required options carry a `missing` string used as the validation toast.
 - `app.js`: hash router (`#welcome`, `#menu`, `#review`, `#thanks`), rendering, events, ntfy send.
   `orderLines()` is the single source for receipt, thank-you list and ntfy message.
-- `doodles.js`: simple inline-SVG line doodles (32×32, ink stroke + flat fill), keyed by `doodle` in menu.js.
+- `doodles.js`: simple inline-SVG line doodles (32×32, ink stroke + flat fill). Only about a dozen dishes get one, via
+  `doodle: { name, x, tilt, size }` in menu.js. Each is hand-placed in the blank ruled line above its dish, and the
+  placements are deliberately varied (user: never a column of icons, not every row).
 - **Ruled-paper grid (menu):** rules every 28px. Loose text is always exactly one 28px line (`.item-line` has a
   fixed height, because baseline-aligning three fonts grows it to 29px and the error compounds). Vertical spacing is
   only 0 or multiples of 28. Everything else is an opaque `.snap` card whose height a ResizeObserver in app.js rounds
   up to whole lines. Selected dishes get a highlighter swipe (`.hl` background-size), not a box.
 - `styles.css`: meowmap's "scrapbook tactile" tokens/stickers copied over (light-only). Dashed edges are
   gradient layers, never `border-style: dashed`, and never set the `background` shorthand on `.chip`/`.btn-ghost`.
-- `og.png` (1200×630 link preview) and `icon.png` were screenshotted from the live page in headless Brave.
-  Regenerate them if the welcome card changes. The `og:image` URL in `index.html` is absolute.
+- **Cache busting:** Pages serves everything with `max-age=600`. Every asset URL, including the ES module imports
+  in app.js, carries `?v=__BUILD__`, which the deploy workflow seds to the short commit SHA. A new local import needs it too.
+- `og.png` (1200×630 text-message link preview) and `icon.png` (favicon/touch icon, 192²) are the coffee-cup doodle on
+  a marigold sticker. They were rendered from a scratch HTML page via headless Brave over CDP; the `brave --screenshot` CLI hangs.
+  The `og:image` URL in `index.html` is absolute.
 
 ## Testing
 No test suite. Drive it in headless Brave via raw CDP (Node 22 global `WebSocket`; npm installs were denied),

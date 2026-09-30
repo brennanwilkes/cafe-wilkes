@@ -1,6 +1,6 @@
-import { NTFY_TOPIC, STORAGE_KEY } from './config.js';
-import { DOODLES } from './doodles.js';
-import { DRINKS, SECTIONS, SERVE_TIMES, PLACES, ITEMS, DRINKS_BY_ID } from './menu.js';
+import { NTFY_TOPIC, STORAGE_KEY } from './config.js?v=__BUILD__';
+import { DOODLES } from './doodles.js?v=__BUILD__';
+import { DRINKS, SECTIONS, SERVE_TIMES, PLACES, ITEMS, DRINKS_BY_ID } from './menu.js?v=__BUILD__';
 
 const $ = sel => document.querySelector(sel);
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -95,6 +95,10 @@ function chipRow(group, choices, selected, fill, narrow = false) {
 }
 
 function itemHtml(item, fill, kind) {
+  // Hand-placed decoration in the blank ruled line above the dish.
+  const d = item.doodle;
+  const deco = d === undefined ? ''
+    : `<span class="deco" style="left:${d.x}%;--tilt:${d.tilt}deg;--size:${d.size}px">${DOODLES[d.name]}</span>`;
   const on = kind === 'drink' ? order.drink === item.id : item.id in order.items;
   const picks = on && kind === 'food' ? order.items[item.id] : blankPicks(item);
   const opts = (item.options ?? []).map(opt => {
@@ -109,9 +113,9 @@ function itemHtml(item, fill, kind) {
   }).join('');
   return `
     <div class="item${on ? ' on' : ''}" id="item-${item.id}" style="--fill:${fill}">
+      ${deco}
       <button type="button" class="item-head" data-${kind}="${item.id}" aria-pressed="${on}">
         <span class="check">${CHECK_SVG}</span>
-        <span class="doodle">${DOODLES[item.doodle]}</span>
         <span class="item-line">
           <span class="item-name"><span class="hl">${esc(item.name)}</span></span>
           <span class="leader"></span>
@@ -124,12 +128,11 @@ function itemHtml(item, fill, kind) {
     </div>`;
 }
 
-function sectionHtml(id, title, note, fill, doodle, body) {
+function sectionHtml(id, title, note, fill, body) {
   return `
     <section class="menu-sec" id="${id}">
       <header class="sec-head">
         <h2 class="label" style="--fill:${fill}">${esc(title)}</h2>
-        <span class="sec-doodle">${DOODLES[doodle]}</span>
         <span class="sec-note hand">${esc(note)}</span>
       </header>
       ${body}
@@ -138,11 +141,11 @@ function sectionHtml(id, title, note, fill, doodle, body) {
 
 function renderMenu() {
   $('#menu-body').innerHTML = [
-    sectionHtml('sec-drinks', 'To Drink', 'Pick one', 'var(--marigold)', 'cup',
+    sectionHtml('sec-drinks', 'To Drink', 'Pick one', 'var(--marigold)',
       DRINKS.map(d => itemHtml(d, 'var(--marigold)', 'drink')).join('')),
-    ...SECTIONS.map(s => sectionHtml(`sec-${s.id}`, s.title, s.note, s.fill, s.doodle,
+    ...SECTIONS.map(s => sectionHtml(`sec-${s.id}`, s.title, s.note, s.fill,
       s.items.map(i => itemHtml(i, s.fill, 'food')).join(''))),
-    sectionHtml('sec-service', 'Service', 'The fine print', 'var(--peri)', 'bell', `
+    sectionHtml('sec-service', 'Service', 'The fine print', 'var(--peri)', `
       <div class="service snap"><div class="snap-inner">
         <div class="opt"><span class="opt-label">When shall we serve?</span>
           ${chipRow('time', SERVE_TIMES, c => order.time === c, 'var(--marigold)', true)}</div>

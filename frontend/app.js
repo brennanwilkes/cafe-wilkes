@@ -1,4 +1,5 @@
 import { NTFY_TOPIC, STORAGE_KEY } from './config.js';
+import { DOODLES } from './doodles.js';
 import { DRINKS, SECTIONS, SERVE_TIMES, PLACES, ITEMS, DRINKS_BY_ID } from './menu.js';
 
 const $ = sel => document.querySelector(sel);
@@ -77,9 +78,18 @@ function problems(o) {
 
 const CHECK_SVG = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.8c2 1.6 3.4 3.3 4.6 5.4 2.6-5.6 6-9.8 10.6-13.4" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 
-function chipRow(group, choices, selected, fill) {
-  return `<div class="chiprow">${choices.map((c, i) => `
-    <button type="button" class="chip" style="--fill:${fill};--tilt:${i % 2 ? 1.5 : -2}deg"
+// Every block that isn't a single line of text is an opaque card whose height is rounded
+// up to whole ruled lines, so the text after it still sits on the ruling.
+const LINE = 28;
+const snapper = new ResizeObserver(entries => {
+  for (const e of entries) {
+    e.target.parentElement.style.height = `${Math.ceil(e.borderBoxSize[0].blockSize / LINE) * LINE}px`;
+  }
+});
+
+function chipRow(group, choices, selected, fill, narrow = false) {
+  return `<div class="chiprow${narrow ? ' narrow' : ''}">${choices.map((c, i) => `
+    <button type="button" class="chip" style="--fill:${fill};--tilt:${i % 2 ? 1.5 : -1.5}deg"
       data-group="${esc(group)}" data-value="${esc(c)}" aria-pressed="${selected(c)}">${esc(c)}</button>`).join('')}
   </div>`;
 }
@@ -101,40 +111,48 @@ function itemHtml(item, fill, kind) {
     <div class="item${on ? ' on' : ''}" id="item-${item.id}" style="--fill:${fill}">
       <button type="button" class="item-head" data-${kind}="${item.id}" aria-pressed="${on}">
         <span class="check">${CHECK_SVG}</span>
-        <span class="item-text">
-          <span class="item-name">${esc(item.name)}${item.storeBought ? ' <span class="stamp mini">store-bought</span>' : ''}</span>
-          <span class="item-desc">${esc(item.desc)}</span>
+        <span class="doodle">${DOODLES[item.doodle]}</span>
+        <span class="item-line">
+          <span class="item-name"><span class="hl">${esc(item.name)}</span></span>
+          <span class="leader"></span>
+          <span class="price">${esc(priceText(item.price))}</span>
         </span>
-        <span class="leader"></span>
-        <span class="price">${esc(priceText(item.price))}</span>
+        ${item.desc ? `<span class="item-desc">${esc(item.desc)}</span>` : ''}
+        ${item.storeBought ? '<span class="item-desc"><span class="stamp mini">store-bought</span></span>' : ''}
       </button>
-      ${opts ? `<div class="item-opts">${opts}</div>` : ''}
+      ${opts ? `<div class="item-opts snap"><div class="snap-inner">${opts}</div></div>` : ''}
     </div>`;
 }
 
-function sectionHtml(id, title, note, fill, body) {
+function sectionHtml(id, title, note, fill, doodle, body) {
   return `
     <section class="menu-sec" id="${id}">
-      <h2 class="sec-title"><span class="label" style="--fill:${fill}">${esc(title)}</span></h2>
-      <p class="sec-note hand">${esc(note)}</p>
+      <header class="sec-head">
+        <h2 class="label" style="--fill:${fill}">${esc(title)}</h2>
+        <span class="sec-doodle">${DOODLES[doodle]}</span>
+        <span class="sec-note hand">${esc(note)}</span>
+      </header>
       ${body}
     </section>`;
 }
 
 function renderMenu() {
   $('#menu-body').innerHTML = [
-    sectionHtml('sec-drinks', 'To Drink', 'Pick one.', 'var(--marigold)',
+    sectionHtml('sec-drinks', 'To Drink', 'Pick one', 'var(--marigold)', 'cup',
       DRINKS.map(d => itemHtml(d, 'var(--marigold)', 'drink')).join('')),
-    ...SECTIONS.map(s => sectionHtml(`sec-${s.id}`, s.title, s.note, s.fill,
+    ...SECTIONS.map(s => sectionHtml(`sec-${s.id}`, s.title, s.note, s.fill, s.doodle,
       s.items.map(i => itemHtml(i, s.fill, 'food')).join(''))),
-    sectionHtml('sec-service', 'Service', 'The fine print.', 'var(--peri)', `
-      <div class="opt"><span class="opt-label">When shall we serve?</span>
-        ${chipRow('time', SERVE_TIMES, c => order.time === c, 'var(--marigold)')}</div>
-      <div class="opt"><span class="opt-label">Where would you like it?</span>
-        ${chipRow('place', PLACES, c => order.place === c, 'var(--jade)')}</div>
-      <label class="opt"><span class="opt-label">Notes for the chef <em>(optional)</em></span>
-        <textarea class="field" id="notes" rows="3" placeholder="Allergies, cravings, compliments…">${esc(order.notes)}</textarea></label>`),
+    sectionHtml('sec-service', 'Service', 'The fine print', 'var(--peri)', 'bell', `
+      <div class="service snap"><div class="snap-inner">
+        <div class="opt"><span class="opt-label">When shall we serve?</span>
+          ${chipRow('time', SERVE_TIMES, c => order.time === c, 'var(--marigold)', true)}</div>
+        <div class="opt"><span class="opt-label">Where would you like it?</span>
+          ${chipRow('place', PLACES, c => order.place === c, 'var(--jade)')}</div>
+        <label class="opt"><span class="opt-label">Notes for the chef <em>(optional)</em></span>
+          <textarea class="field" id="notes" rows="3" placeholder="Allergies, cravings, compliments…">${esc(order.notes)}</textarea></label>
+      </div></div>`),
   ].join('');
+  $('#menu-body').querySelectorAll('.snap-inner').forEach(el => snapper.observe(el));
   updateBar();
 }
 
@@ -253,6 +271,8 @@ document.addEventListener('click', e => {
     if (id in order.items) {
       delete order.items[id];
       el.outerHTML = itemHtml(ITEMS.get(id), el.style.getPropertyValue('--fill'), 'food');
+      const fresh = $(`#item-${id} .snap-inner`);
+      if (fresh !== null) snapper.observe(fresh);
     } else {
       order.items[id] = blankPicks(ITEMS.get(id));
       el.classList.add('on');

@@ -95,10 +95,10 @@ function chipRow(group, choices, selected, fill, narrow = false) {
 }
 
 function itemHtml(item, fill, kind) {
-  // Hand-placed decoration in the blank ruled line above the dish.
+  // Hand-placed faint stamp behind the dish row.
   const d = item.doodle;
   const deco = d === undefined ? ''
-    : `<span class="deco" style="left:${d.x}%;--tilt:${d.tilt}deg;--size:${d.size}px">${DOODLES[d.name]}</span>`;
+    : `<span class="deco" style="left:${d.x}%;--y:${d.y}px;--tilt:${d.tilt}deg;--size:${d.size}px">${DOODLES[d.name]}</span>`;
   const on = kind === 'drink' ? order.drink === item.id : item.id in order.items;
   const picks = on && kind === 'food' ? order.items[item.id] : blankPicks(item);
   const opts = (item.options ?? []).map(opt => {

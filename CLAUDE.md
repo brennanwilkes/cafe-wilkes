@@ -22,9 +22,11 @@ restaurant-style, Brennan gets a push notification. Live at https://brennanwilke
   unit for "Total due". Required options carry a `missing` string used as the validation toast.
 - `app.js`: hash router (`#welcome`, `#menu`, `#review`, `#thanks`), rendering, events, ntfy send.
   `orderLines()` is the single source for receipt, thank-you list and ntfy message.
-- `doodles.js`: simple inline-SVG line doodles (32×32, ink stroke + flat fill). Only about a dozen dishes get one, via
-  `doodle: { name, x, tilt, size }` in menu.js. Each is hand-placed in the blank ruled line above its dish, and the
-  placements are deliberately varied (user: never a column of icons, not every row).
+- `doodles.js`: simple line doodles (32×32). On the menu they show as faint one-ink rubber stamps behind the rows:
+  CSS recolours them to `--stamp` at low opacity, and the `#stamp` SVG filter in index.html roughens the edges and adds
+  speckle. `z-index: -1` inside the isolated `.menu-sec` keeps them above the ruling but under text and cards. About 15 dishes
+  get one via `doodle: { name, x, y, tilt, size }` in menu.js, placed by hand with varied spots (user: never a
+  column of icons, and not in the gaps between lines). The user rejected the crêpe, burrito and bacon drawings, so don't bring them back.
 - **Ruled-paper grid (menu):** rules every 28px. Loose text is always exactly one 28px line (`.item-line` has a
   fixed height, because baseline-aligning three fonts grows it to 29px and the error compounds). Vertical spacing is
   only 0 or multiples of 28. Everything else is an opaque `.snap` card whose height a ResizeObserver in app.js rounds

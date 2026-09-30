@@ -187,7 +187,7 @@ hr.rule { border: 0; height: 0; border-top: 1.5px solid var(--rule); margin: 14p
 .page { padding: 28px 17px calc(112px + var(--safe-b)); max-width: 560px; margin: 0 auto; min-height: 100svh; }
 #menu-body { line-height: 28px; }
 
-.menu-sec { scroll-margin-top: 84px; }
+.menu-sec { scroll-margin-top: 84px; isolation: isolate; }
 .menu-sec + .menu-sec { margin-top: 28px; }
 
 .sec-head { display: flex; align-items: flex-end; gap: 10px; min-height: 56px; margin-bottom: 28px; }
@@ -202,11 +202,17 @@ hr.rule { border: 0; height: 0; border-top: 1.5px solid var(--rule); margin: 14p
 .sec-note { margin-left: auto; text-align: right; font-size: var(--t-md); line-height: 28px; }
 
 .item { position: relative; display: flow-root; margin-bottom: 28px; scroll-margin-top: 112px; }
+/* Faint one-ink stamps behind the rows. z-index -1 inside the isolated .menu-sec puts them
+   above the ruled paper but under text and cards. */
 .deco {
-  position: absolute; top: calc(-14px - var(--size) / 2); width: var(--size); height: var(--size);
-  pointer-events: none; transform: translateX(-50%) rotate(var(--tilt));
+  position: absolute; z-index: -1; top: calc(var(--y) - var(--size) / 2);
+  width: var(--size); height: var(--size); pointer-events: none;
+  transform: translateX(-50%) rotate(var(--tilt));
+  color: var(--stamp); opacity: .3;
 }
 .deco svg { display: block; width: 100%; height: 100%; }
+.deco svg * { stroke: currentColor; }
+.deco svg [fill]:not([fill="none"]) { fill: currentColor; fill-opacity: .28; }
 .item:last-child { margin-bottom: 0; }
 
 /* The padding / negative margin pair makes a 56px tap target while the row still only

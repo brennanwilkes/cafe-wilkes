@@ -5,44 +5,44 @@ const GRIDDLE_TOPPINGS = {
 };
 
 export const DRINKS = [
-  { id: 'vanilla-latte', name: 'Vanilla Latte', doodle: { name: 'cup', x: 84, tilt: 12, size: 38 }, price: [1, 'kiss'] },
+  { id: 'vanilla-latte', name: 'Vanilla Latte', doodle: { name: 'cup', x: 80, y: 8, tilt: -12, size: 70 }, price: [1, 'kiss'] },
   { id: 'iced-vanilla-latte', name: 'Iced Vanilla Latte', price: [1, 'kiss'] },
   { id: 'raspberry-mocha', name: 'Raspberry Mocha Latte', price: [2, 'kiss'] },
-  { id: 'iced-raspberry-mocha', name: 'Iced Raspberry Mocha Latte', doodle: { name: 'iced', x: 20, tilt: -10, size: 34 }, price: [2, 'kiss'] },
-  { id: 'acv-tea', name: 'Apple Cider Vinegar Tea', desc: 'In case you’re feeling a bit off', price: [1, 'hug'] },
+  { id: 'iced-raspberry-mocha', name: 'Iced Raspberry Mocha Latte', doodle: { name: 'iced', x: 62, y: 10, tilt: 10, size: 64 }, price: [2, 'kiss'] },
+  { id: 'acv-tea', name: 'Apple Cider Vinegar Tea', doodle: { name: 'tea', x: 88, y: 20, tilt: -8, size: 62 }, desc: 'In case you’re feeling a bit off', price: [1, 'hug'] },
   { id: 'cappuccino', name: 'Cappuccino', price: [1, 'kiss'] },
-  { id: 'mimosa', name: 'Mimosa', desc: 'Prosecco & orange juice', price: [1, 'slow dance'] },
-  { id: 'aperol-spritz', name: 'Aperol Spritz', desc: 'Aperol, prosecco & soda', doodle: { name: 'spritz', x: 62, tilt: 8, size: 40 }, price: [1, 'slow dance'] },
+  { id: 'mimosa', name: 'Mimosa', doodle: { name: 'flute', x: 46, y: 14, tilt: 14, size: 66 }, desc: 'Prosecco & orange juice', price: [1, 'slow dance'] },
+  { id: 'aperol-spritz', name: 'Aperol Spritz', doodle: { name: 'spritz', x: 78, y: 10, tilt: -10, size: 72 }, desc: 'Aperol, prosecco & soda', price: [1, 'slow dance'] },
 ];
 
 export const SECTIONS = [
   {
     id: 'sweet', title: 'Sweet', fill: 'var(--blossom)', note: 'Pick as many as you like',
     items: [
-      { id: 'pancakes', name: 'Pancakes', doodle: { name: 'pancakes', x: 88, tilt: -8, size: 40 }, price: [3, 'kiss'], options: [GRIDDLE_TOPPINGS] },
-      { id: 'waffles', name: 'Waffles', price: [3, 'kiss'], options: [GRIDDLE_TOPPINGS] },
-      { id: 'crepes', name: 'Crêpes', doodle: { name: 'crepe', x: 32, tilt: 14, size: 32 }, price: [3, 'kiss'], options: [GRIDDLE_TOPPINGS] },
+      { id: 'pancakes', name: 'Pancakes', doodle: { name: 'pancakes', x: 70, y: 10, tilt: 8, size: 72 }, price: [3, 'kiss'], options: [GRIDDLE_TOPPINGS] },
+      { id: 'waffles', name: 'Waffles', doodle: { name: 'waffle', x: 88, y: 12, tilt: -14, size: 60 }, price: [3, 'kiss'], options: [GRIDDLE_TOPPINGS] },
+      { id: 'crepes', name: 'Crêpes', price: [3, 'kiss'], options: [GRIDDLE_TOPPINGS] },
       { id: 'french-toast', name: 'French Toast', price: [3, 'kiss'], options: [GRIDDLE_TOPPINGS] },
     ],
   },
   {
     id: 'bakery', title: 'Bakery Case', fill: 'var(--marigold)', note: 'Not homemade',
     items: [
-      { id: 'cinnamon-buns', name: 'Cinnamon Buns', price: [1, 'hug'], storeBought: true },
+      { id: 'cinnamon-buns', name: 'Cinnamon Buns', doodle: { name: 'bun', x: 60, y: 18, tilt: 10, size: 64 }, price: [1, 'hug'], storeBought: true },
       { id: 'croissant', name: 'Plain Croissant', price: [1, 'hug'], storeBought: true },
-      { id: 'choc-croissant', name: 'Chocolate Croissant', doodle: { name: 'croissant', x: 72, tilt: -6, size: 38 }, price: [1, 'hug'], storeBought: true },
+      { id: 'choc-croissant', name: 'Chocolate Croissant', doodle: { name: 'croissant', x: 82, y: 14, tilt: -8, size: 72 }, price: [1, 'hug'], storeBought: true },
     ],
   },
   {
     id: 'savoury', title: 'Savoury', fill: 'var(--jade)', note: 'Pick as many as you like',
     items: [
       {
-        id: 'toast', name: 'Toast', price: [1, 'kiss'],
+        id: 'toast', name: 'Toast', doodle: { name: 'toast', x: 52, y: 10, tilt: -10, size: 62 }, price: [1, 'kiss'],
         options: [{ key: 'spread', label: 'Topped with', type: 'multi', required: true, missing: 'Toast: pick a topping (plain counts)',
           choices: ['Avocado', 'Nutella', 'Peanut butter', 'Fruit jelly', 'Plain'] }],
       },
       {
-        id: 'eggs', name: 'Eggs', doodle: { name: 'egg', x: 14, tilt: 10, size: 36 }, price: [2, 'kiss'],
+        id: 'eggs', name: 'Eggs', doodle: { name: 'egg', x: 84, y: 12, tilt: 12, size: 70 }, price: [2, 'kiss'],
         options: [{ key: 'style', label: 'How would you like them?', type: 'text', required: true,
           missing: 'Eggs: how would you like them cooked?', placeholder: 'e.g. two, over easy' }],
       },
@@ -60,12 +60,12 @@ export const SECTIONS = [
         ],
       },
       {
-        id: 'bagel', name: 'Bagel & Cream Cheese', price: [1, 'hug'],
+        id: 'bagel', name: 'Bagel & Cream Cheese', doodle: { name: 'bagel', x: 66, y: 10, tilt: -6, size: 64 }, price: [1, 'hug'],
         options: [{ key: 'extras', label: 'Extras', type: 'multi',
           choices: ['Tomato', 'Cucumber', 'Red onion', 'Everything seasoning'] }],
       },
       {
-        id: 'burrito', name: 'Breakfast Burrito', doodle: { name: 'burrito', x: 84, tilt: -14, size: 38 }, price: [1, 'back scratch'],
+        id: 'burrito', name: 'Breakfast Burrito', price: [1, 'back scratch'],
         options: [{ key: 'fillings', label: 'Fillings', type: 'multi',
           choices: ['Egg', 'Cheese', 'Hashbrown', 'Bacon', 'Sausage', 'Avocado', 'Salsa', 'Sour cream', 'Hot sauce'] }],
       },
@@ -76,17 +76,17 @@ export const SECTIONS = [
     items: [
       { id: 'hashbrowns', name: 'Hashbrowns', price: [1, 'kiss'] },
       { id: 'sausage', name: 'Sausage', price: [1, 'kiss'] },
-      { id: 'bacon', name: 'Bacon', doodle: { name: 'bacon', x: 42, tilt: 8, size: 34 }, price: [1, 'kiss'] },
+      { id: 'bacon', name: 'Bacon', price: [1, 'kiss'] },
     ],
   },
   {
     id: 'girl', title: 'Girl Breakfast', fill: 'var(--coral)', note: 'No judgement here',
     items: [
-      { id: 'ben-jerrys', name: "Ben & Jerry's", doodle: { name: 'pint', x: 78, tilt: -10, size: 38 }, price: [1, 'cuddle'] },
+      { id: 'ben-jerrys', name: "Ben & Jerry's", doodle: { name: 'pint', x: 58, y: 12, tilt: -12, size: 66 }, price: [1, 'cuddle'] },
       { id: 'sv-chips', name: 'Salt & Vinegar Chips', price: [1, 'cuddle'] },
-      { id: 'takis', name: 'Takis', doodle: { name: 'chips', x: 24, tilt: 12, size: 32 }, price: [1, 'cuddle'] },
+      { id: 'takis', name: 'Takis', doodle: { name: 'chips', x: 84, y: 10, tilt: 10, size: 64 }, price: [1, 'cuddle'] },
       { id: 'oreos', name: 'Oreos', price: [1, 'cuddle'] },
-      { id: 'digestives', name: 'Digestive Cookies', price: [1, 'cuddle'] },
+      { id: 'digestives', name: 'Digestive Cookies', doodle: { name: 'cookie', x: 48, y: 14, tilt: 6, size: 60 }, price: [1, 'cuddle'] },
     ],
   },
 ];

@@ -18,7 +18,8 @@ restaurant-style, Brennan gets a push notification. Live at https://brennanwilke
 ## Files
 - `menu.js`: all menu data. Descriptions (`desc`) only list what's in a dish when the name alone is unclear. Never
   flavour text (user rule). Isabelle dislikes banana, blueberries and sprinkles, so keep them off the toppings.
-  Prices are `[count, unit]` tuples (e.g. `[2, 'kiss']`); the receipt sums them per
+  Prices are `[count, unit]` tuples (e.g. `[2, 'kiss']`). The only units are kiss, hug, cuddle and living room dance
+  (user rule; living room dance should be fairly common). The receipt sums them per
   unit for "Total due". Required options carry a `missing` string used as the validation toast.
 - `app.js`: hash router (`#welcome`, `#menu`, `#review`, `#thanks`), rendering, events, ntfy send.
   `orderLines()` is the single source for receipt, thank-you list and ntfy message.

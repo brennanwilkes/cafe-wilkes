@@ -128,9 +128,9 @@ function itemHtml(item, fill, kind) {
     </div>`;
 }
 
-function sectionHtml(id, title, note, fill, body) {
+function sectionHtml(id, title, note, fill, ink, body) {
   return `
-    <section class="menu-sec" id="${id}">
+    <section class="menu-sec" id="${id}" style="--fill-ink:${ink}">
       <header class="sec-head">
         <h2 class="label" style="--fill:${fill}">${esc(title)}</h2>
         <span class="sec-note hand">${esc(note)}</span>
@@ -141,16 +141,16 @@ function sectionHtml(id, title, note, fill, body) {
 
 function renderMenu() {
   $('#menu-body').innerHTML = [
-    sectionHtml('sec-drinks', 'To Drink', 'Pick one', 'var(--marigold)',
+    sectionHtml('sec-drinks', 'To Drink', 'Pick one', 'var(--marigold)', 'var(--marigold-ink)',
       DRINKS.map(d => itemHtml(d, 'var(--marigold)', 'drink')).join('')),
-    ...SECTIONS.map(s => sectionHtml(`sec-${s.id}`, s.title, s.note, s.fill,
+    ...SECTIONS.map(s => sectionHtml(`sec-${s.id}`, s.title, s.note, s.fill, s.ink,
       s.items.map(i => itemHtml(i, s.fill, 'food')).join(''))),
-    sectionHtml('sec-service', 'Service', 'The fine print', 'var(--peri)', `
+    sectionHtml('sec-service', 'Service', 'The fine print', 'var(--peri)', 'var(--peri-ink)', `
       <div class="service snap"><div class="snap-inner">
         <div class="opt"><span class="opt-label">When shall we serve?</span>
-          ${chipRow('time', SERVE_TIMES, c => order.time === c, 'var(--marigold)', true)}</div>
+          ${chipRow('time', SERVE_TIMES, c => order.time === c, 'var(--peri)', true)}</div>
         <div class="opt"><span class="opt-label">Where would you like it?</span>
-          ${chipRow('place', PLACES, c => order.place === c, 'var(--jade)')}</div>
+          ${chipRow('place', PLACES, c => order.place === c, 'var(--peri-lite)')}</div>
         <label class="opt"><span class="opt-label">Notes for the chef <em>(optional)</em></span>
           <textarea class="field" id="notes" rows="3" placeholder="Allergies, cravings, compliments…">${esc(order.notes)}</textarea></label>
       </div></div>`),

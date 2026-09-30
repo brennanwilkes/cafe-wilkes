@@ -31,6 +31,12 @@ restaurant-style, Brennan gets a push notification. Live at https://brennanwilke
   fixed height, because baseline-aligning three fonts grows it to 29px and the error compounds). Vertical spacing is
   only 0 or multiples of 28. Everything else is an opaque `.snap` card whose height a ResizeObserver in app.js rounds
   up to whole lines. Selected dishes get a highlighter swipe (`.hl` background-size), not a box.
+- **Colour coding:** each section has a `fill` (sticker colour) and an `ink` (`--<colour>-ink`, a darker shade readable
+  on paper). `--fill-ink` is set on the `<section>`, and prices, stamps and store-bought tags all use it. Service chips are
+  periwinkle shades (`--peri`, `--peri-lite`). The Review order button is `--tangerine`, which no section uses.
+- **Option cards:** taped down with `.snap::before/::after`, on the bottom corners and the sides only, never the top
+  edge, which sits under the name and price. Selected chips are hand-cut stickers (double white margin, gloss, pop
+  animation) with a tick or heart badge inside the top edge, so neighbouring badges don't collide.
 - `styles.css`: meowmap's "scrapbook tactile" tokens/stickers copied over (light-only). Dashed edges are
   gradient layers, never `border-style: dashed`, and never set the `background` shorthand on `.chip`/`.btn-ghost`.
 - **Cache busting:** Pages serves everything with `max-age=600`. Every asset URL, including the ES module imports
